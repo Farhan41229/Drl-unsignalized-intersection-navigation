@@ -83,8 +83,8 @@ class MultiTaskIntersectionEnv(Env):
 
     @property
     def action_space(self):
-        """Continuous baseline action space placeholder [-2.6, 1.0]."""
-        return Box(low=-2.6, high=1.0, shape=(1,), dtype=np.float32)
+        """Discrete(3): {0: accelerate, 1: idle, 2: decelerate}."""
+        return Discrete(3)
 
     @property
     def observation_space(self):
@@ -164,13 +164,22 @@ class MultiTaskIntersectionEnv(Env):
     # -- Env interface ---------------------------------------------------
 
     def _apply_rl_actions(self, rl_actions):
-        """Initial baseline direct acceleration mapping."""
         if not self.rl_veh:
             return
         veh_id = self.rl_veh[0]
         if veh_id not in self.k.vehicle.get_ids():
             return
-        accel = float(rl_actions[0]) if hasattr(rl_actions, '__len__') else float(rl_actions)
+
+        action = int(rl_actions)
+        v = self.k.vehicle.get_speed(veh_id)
+        v_dis = round(v)
+        if action == 0:      # accelerate
+            v_tar = min(v_dis + 1, self.target_velocity)
+        elif action == 2:    # decelerate
+            v_tar = max(v_dis - 1, 0)
+        else:                # idle
+            v_tar = v_dis
+        accel = self.speed_gain * (v_tar - v)
         self.k.vehicle.apply_acceleration(veh_id, accel)
 
     def get_state(self, **kwargs):
