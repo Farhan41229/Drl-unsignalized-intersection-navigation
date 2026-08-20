@@ -5,4 +5,7 @@ if [ -z "$TARGET_SCRIPT" ]; then echo "Usage: ./pcore_affinity_launcher.sh <scri
 shift
 export OMP_NUM_THREADS=4
 export MKL_NUM_THREADS=4
+export OPENBLAS_NUM_THREADS=4
+export VECLIB_MAXIMUM_THREADS=4
+export NUMEXPR_NUM_THREADS=4
 exec taskset -c 0,2,4,6 python -u "$TARGET_SCRIPT" "$@"
