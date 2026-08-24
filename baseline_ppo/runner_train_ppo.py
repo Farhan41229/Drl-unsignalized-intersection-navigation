@@ -59,45 +59,6 @@ def parse_args(args):
     return parser.parse_known_args(args)[0]
 
 
-def run_model_stablebaseline(flow_params,
-                             num_cpus=1,
-                             rollout_size=50,
-                             num_steps=50):
-    """Run the model for num_steps if provided.
-
-    Parameters
-    ----------
-    flow_params : dict
-        flow-specific parameters
-    num_cpus : int
-        number of CPUs used during training
-    rollout_size : int
-        length of a single rollout
-    num_steps : int
-        total number of training steps
-    The total rollout length is rollout_size.
-
-    Returns
-    -------
-    stable_baselines.*
-        the trained model
-    """
-    from stable_baselines.common.vec_env import DummyVecEnv, SubprocVecEnv
-    from stable_baselines import PPO2
-
-    if num_cpus == 1:
-        constructor = env_constructor(params=flow_params, version=0)()
-        # The algorithms require a vectorized environment to run
-        env = DummyVecEnv([lambda: constructor])
-    else:
-        env = SubprocVecEnv([env_constructor(params=flow_params, version=i)
-                             for i in range(num_cpus)])
-
-    train_model = PPO2('MlpPolicy', env, verbose=1, n_steps=rollout_size)
-    train_model.learn(total_timesteps=num_steps)
-    return train_model
-
-
 def setup_exps_rllib(flow_params,
                      n_cpus,
                      n_rollouts,
