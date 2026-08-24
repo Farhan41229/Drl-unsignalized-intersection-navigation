@@ -174,58 +174,6 @@ def train_rllib(submodule, flags):
     run_experiments({flow_params["exp_tag"]: exp_config})
 
 
-def train_h_baselines(env_name, args, multiagent):
-    """Train policies using SAC and TD3 with h-baselines."""
-    from hbaselines.algorithms import OffPolicyRLAlgorithm
-    from hbaselines.utils.train import parse_options, get_hyperparameters
-
-    # Get the command-line arguments that are relevant here
-    args = parse_options(description="", example_usage="", args=args)
-
-    # the base directory that the logged data will be stored in
-    base_dir = "training_data"
-
-    for i in range(args.n_training):
-        # value of the next seed
-        seed = args.seed + i
-
-        # The time when the current experiment started.
-        now = strftime("%Y-%m-%d-%H:%M:%S")
-
-        # Create a save directory folder (if it doesn't exist).
-        dir_name = os.path.join(base_dir, '{}/{}'.format(args.env_name, now))
-        ensure_dir(dir_name)
-
-        # Get the policy class.
-        if args.alg == "TD3":
-            if multiagent:
-                from hbaselines.multi_fcnet.td3 import MultiFeedForwardPolicy
-                policy = MultiFeedForwardPolicy
-            else:
-                from hbaselines.fcnet.td3 import FeedForwardPolicy
-                policy = FeedForwardPolicy
-        elif args.alg == "SAC":
-            if multiagent:
-                from hbaselines.multi_fcnet.sac import MultiFeedForwardPolicy
-                policy = MultiFeedForwardPolicy
-            else:
-                from hbaselines.fcnet.sac import FeedForwardPolicy
-                policy = FeedForwardPolicy
-        else:
-            raise ValueError("Unknown algorithm: {}".format(args.alg))
-
-        # Get the hyperparameters.
-        hp = get_hyperparameters(args, policy)
-
-        # Add the seed for logging purposes.
-        params_with_extra = hp.copy()
-        params_with_extra['seed'] = seed
-        params_with_extra['env_name'] = args.env_name
-        params_with_extra['policy_name'] = policy.__name__
-        params_with_extra['algorithm'] = args.alg
-        params_with_extra['date/time'] = now
-
-        # Add the hyperparameters to the folder.
         with open(os.path.join(dir_name, 'hyperparameters.json'), 'w') as f:
             json.dump(params_with_extra, f, sort_keys=True, indent=4)
 
