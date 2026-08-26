@@ -138,13 +138,15 @@ class DiscreteSACAgent:
         self.critic_target.load_state_dict(self.critic.state_dict())
         self.critic_optimizer = optim.Adam(self.critic.parameters(), lr=critic_lr)
 
-        # Fixed baseline temperature (prior to auto-tuning)
-        self.target_entropy = None
-        self._fixed_alpha = 0.2
+        # Automatic Entropy Temperature tuning
+        # Target entropy: -log(1/|A|) * ratio
+        self.target_entropy = -np.log(1.0 / action_dim) * target_entropy_ratio
+        self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
+        self.alpha_optimizer = optim.Adam([self.log_alpha], lr=alpha_lr)
 
     @property
     def alpha(self):
-        return torch.tensor(self._fixed_alpha, device=self.device)
+        return self.log_alpha.exp()
 
     def select_action(self, state, evaluate=False):
         with torch.no_grad():
