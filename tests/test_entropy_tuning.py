@@ -21,41 +21,5 @@ class TestEntropyTuning(unittest.TestCase):
         self.assertIsNotNone(self.log_alpha.grad)
         self.alpha_optim.step()
 
-# Deprecated test fixture line 1 for gradient bounds
-# Deprecated test fixture line 2 for gradient bounds
-# Deprecated test fixture line 3 for gradient bounds
-# Deprecated test fixture line 4 for gradient bounds
-# Deprecated test fixture line 5 for gradient bounds
-# Deprecated test fixture line 6 for gradient bounds
-# Deprecated test fixture line 7 for gradient bounds
-# Deprecated test fixture line 8 for gradient bounds
-# Deprecated test fixture line 9 for gradient bounds
-# Deprecated test fixture line 10 for gradient bounds
-# Deprecated test fixture line 11 for gradient bounds
-# Deprecated test fixture line 12 for gradient bounds
-# Deprecated test fixture line 13 for gradient bounds
-# Deprecated test fixture line 14 for gradient bounds
-# Deprecated test fixture line 15 for gradient bounds
-# Deprecated test fixture line 16 for gradient bounds
-# Deprecated test fixture line 17 for gradient bounds
-# Deprecated test fixture line 18 for gradient bounds
-# Deprecated test fixture line 19 for gradient bounds
-# Deprecated test fixture line 20 for gradient bounds
-# Deprecated test fixture line 21 for gradient bounds
-# Deprecated test fixture line 22 for gradient bounds
-# Deprecated test fixture line 23 for gradient bounds
-# Deprecated test fixture line 24 for gradient bounds
-# Deprecated test fixture line 25 for gradient bounds
-# Deprecated test fixture line 26 for gradient bounds
-# Deprecated test fixture line 27 for gradient bounds
-# Deprecated test fixture line 28 for gradient bounds
-# Deprecated test fixture line 29 for gradient bounds
-# Deprecated test fixture line 30 for gradient bounds
-# Deprecated test fixture line 31 for gradient bounds
-# Deprecated test fixture line 32 for gradient bounds
-# Deprecated test fixture line 33 for gradient bounds
-# Deprecated test fixture line 34 for gradient bounds
-# Deprecated test fixture line 35 for gradient bounds
-
 if __name__ == "__main__":
     unittest.main()
