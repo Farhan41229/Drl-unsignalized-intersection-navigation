@@ -37,3 +37,22 @@ Pinning simulation and gradient descent threads to physical Performance Cores el
 * **Default OS Dynamic Scheduling**: 46.2 ep/min (18.1 hours for 50k episodes)
 * **Dedicated P-Core Affinity (0,2,4,6)**: **142.8 ep/min (6.9 hours for 50k episodes)**
 * **Speedup**: **+209% throughput** (saving 22.4 hours across configurations)
+
+---
+
+## 📊 Deterministic Evaluation Protocol (Paper Exact Match)
+Following the exact protocol of Xiao et al. (2024), models are evaluated over **1,000 deterministic episodes per task** (3,000 episodes total per configuration):
+* Action selection is purely greedy: $a_t = \arg\max_a Q(s_t, a)$.
+* **Metrics Recorded**:
+  * **Success Rate (%)**: Reaching destination without incident.
+  * **Collision Rate (%)**: Incident rate with background traffic.
+  * **Mean Speed (m/s)**: Travel efficiency through the conflict zone.
+  * **Mean TTC (s)**: Time-To-Collision safety margins.
+
+```bash
+# Evaluate Config Original
+python common/evaluate_exact.py Original/checkpoints/sac_model_ep_50000.pt --output_dir Original/eval_output
+
+# Evaluate Config B (with intent mu_a)
+python common/evaluate_exact.py B/checkpoints/sac_model_ep_50000.pt --output_dir B/eval_output --use_task_intent
+```
