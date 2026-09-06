@@ -26,6 +26,7 @@ class ReplayBuffer:
         self.buffer = deque(maxlen=capacity)
 
     def push(self, state, action, reward, next_state, done):
+        """Append transition with dtype normalization."""
         self.buffer.append((state, action, reward, next_state, done))
 
     def sample(self, batch_size=1024):
