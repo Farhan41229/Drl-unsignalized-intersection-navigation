@@ -79,6 +79,7 @@ class DiscreteSACActor(nn.Module):
             return action.item()
 
 
+# Twin critic architecture Q_phi1, Q_phi2 for clipped double-Q estimation
 class DiscreteSACCritic(nn.Module):
     """Twin Q-networks with paper's [256, 256, 64, 3] MLP architecture."""
     def __init__(self, state_dim, action_dim=3):
