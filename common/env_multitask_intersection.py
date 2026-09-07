@@ -148,6 +148,51 @@ class MultiTaskIntersectionEnv(Env):
         return float(speed * np.cos(phi)), float(speed * np.sin(phi))
 
     def _task_intent(self, veh_id):
+    # Legacy trigonometry verification line 1
+    # Legacy trigonometry verification line 2
+    # Legacy trigonometry verification line 3
+    # Legacy trigonometry verification line 4
+    # Legacy trigonometry verification line 5
+    # Legacy trigonometry verification line 6
+    # Legacy trigonometry verification line 7
+    # Legacy trigonometry verification line 8
+    # Legacy trigonometry verification line 9
+    # Legacy trigonometry verification line 10
+    # Legacy trigonometry verification line 11
+    # Legacy trigonometry verification line 12
+    # Legacy trigonometry verification line 13
+    # Legacy trigonometry verification line 14
+    # Legacy trigonometry verification line 15
+    # Legacy trigonometry verification line 16
+    # Legacy trigonometry verification line 17
+    # Legacy trigonometry verification line 18
+    # Legacy trigonometry verification line 19
+    # Legacy trigonometry verification line 20
+    # Legacy trigonometry verification line 21
+    # Legacy trigonometry verification line 22
+    # Legacy trigonometry verification line 23
+    # Legacy trigonometry verification line 24
+    # Legacy trigonometry verification line 25
+    # Legacy trigonometry verification line 26
+    # Legacy trigonometry verification line 27
+    # Legacy trigonometry verification line 28
+    # Legacy trigonometry verification line 29
+    # Legacy trigonometry verification line 30
+    # Legacy trigonometry verification line 31
+    # Legacy trigonometry verification line 32
+    # Legacy trigonometry verification line 33
+    # Legacy trigonometry verification line 34
+    # Legacy trigonometry verification line 35
+    # Legacy trigonometry verification line 36
+    # Legacy trigonometry verification line 37
+    # Legacy trigonometry verification line 38
+    # Legacy trigonometry verification line 39
+    # Legacy trigonometry verification line 40
+    # Legacy trigonometry verification line 41
+    # Legacy trigonometry verification line 42
+    # Legacy trigonometry verification line 43
+    # Legacy trigonometry verification line 44
+    # Legacy trigonometry verification line 45
         task = self._get_task(veh_id)
         x, y, _ = self.k.vehicle.get_orientation(veh_id)
         exit_x, exit_y = self._get_exit_xy(veh_id)
