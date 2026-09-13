@@ -1,0 +1,84 @@
+\begin{thebibliography}{10}
+
+\bibitem{chen2025unified}
+Liang Chen et~al.
+\newblock Unified planning framework with drivable area attention extraction
+  for autonomous driving in urban scenarios.
+\newblock {\em IEEE Robotics and Automation Letters (RA-L)}, 2025.
+
+\bibitem{gholamhosseinian2022survey}
+Ashkan Gholamhosseinian and Jochen Seitz.
+\newblock A comprehensive survey on cooperative intersection management for
+  heterogeneous connected vehicles.
+\newblock {\em IEEE Access}, 10:7937--7972, 2022.
+
+\bibitem{huamanreyna2026review}
+Erick Huam\'an~Reyna, Iago Pach\^eco~Gomes, Luis~Alberto Rosero, Valdir Grassi,
+  and Denis~Fernando Wolf.
+\newblock A review on multi-scenario decision-making for urban autonomous
+  driving.
+\newblock {\em IEEE Access}, 2026.
+
+\bibitem{isele2018navigating}
+David Isele, Reza Rahimi, Akansel Cosgun, Kaushik Subramanian, and Kikuo
+  Fujimura.
+\newblock Navigating occluded intersections with autonomous vehicles using deep
+  reinforcement learning.
+\newblock In {\em IEEE International Conference on Robotics and Automation
+  (ICRA)}, 2018.
+
+\bibitem{kai2020multitask}
+Shu Kai et~al.
+\newblock A multi-task reinforcement learning approach for navigating
+  unsignalized intersections.
+\newblock In {\em IEEE Intelligent Vehicles Symposium (IV)}, 2020.
+
+\bibitem{klimke2022enhanced}
+Marvin Klimke, Benjamin Gerigk, Benjamin V\"olz, and Michael Buchholz.
+\newblock An enhanced graph representation for machine learning based automatic
+  intersection management.
+\newblock In {\em IEEE International Intelligent Transportation Systems
+  Conference (ITSC)}, 2022.
+
+\bibitem{riostorres2017survey}
+Jackeline Rios-Torres and Andreas~A. Malikopoulos.
+\newblock A survey on the coordination of connected and automated vehicles at
+  intersections and merging at highway on-ramps.
+\newblock {\em IEEE Transactions on Intelligent Transportation Systems},
+  18(5):1066--1077, 2017.
+
+\bibitem{schier2023deep}
+Maximilian Schier, Christoph Reinders, and Bodo Rosenhahn.
+\newblock Deep reinforcement learning for autonomous driving using high-level
+  heterogeneous graph representations.
+\newblock In {\em IEEE International Conference on Robotics and Automation
+  (ICRA)}, 2023.
+
+\bibitem{shu2022drivingtasks}
+Hong Shu, Teng Liu, Xinyu Mu, and Dongpu Cao.
+\newblock Driving tasks transfer using deep reinforcement learning for
+  decision-making of autonomous vehicles in unsignalized intersection.
+\newblock {\em IEEE Transactions on Vehicular Technology}, 71(1):41--52, 2022.
+
+\bibitem{wu2019dclaim}
+Yiyang Wu, He~Chen, and Feng Zhu.
+\newblock Dcl-aim: Decentralized coordination learning of autonomous
+  intersection management for connected and automated vehicles.
+\newblock {\em Transportation Research Part C: Emerging Technologies},
+  103:246--260, 2019.
+
+\bibitem{xiao2024decision}
+Wenxuan Xiao, Yuyou Yang, Xinyu Mu, Yi~Xie, Xiaolin Tang, Dongpu Cao, and Teng
+  Liu.
+\newblock Decision-making for autonomous vehicles in random task scenarios at
+  unsignalized intersection using deep reinforcement learning.
+\newblock {\em IEEE Transactions on Vehicular Technology}, 73(6):7812--7825,
+  2024.
+
+\bibitem{zhong2021survey}
+Zijia Zhong, Mark Nejad, and Earl~E. Lee.
+\newblock Autonomous and semiautonomous intersection management: A survey.
+\newblock {\em IEEE Intelligent Transportation Systems Magazine}, 13(2):53--70,
+  2021.
+
+\end{thebibliography}
