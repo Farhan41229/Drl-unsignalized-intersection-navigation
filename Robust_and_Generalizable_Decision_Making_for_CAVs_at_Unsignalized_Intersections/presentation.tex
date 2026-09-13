@@ -599,7 +599,7 @@
     \small Config Original cruises at a near-uniform $\sim$7.00 m/s regardless of maneuver. Config B ($+\mu_a$) \alert{actively slows for turning paths} (Left: 6.91, Right: 6.32 m/s) while holding straight-line speed --- direct evidence the task-intent feature is being used, not ignored.
 \end{frame}
 
-\begin{frame}{The Simulation Physics Gap: 100\% vs.\ 97.4\% Success}
+\begin{frame}{Result 4: Simulation Physics Gap (100\% vs.\ 97.4\% Success)}
     \small
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
@@ -622,16 +622,6 @@
     \begin{alertblock}{Takeaway}
         Both pipelines are correctly implemented per specification --- the gap is a \emph{simulator physics} difference, not an algorithmic bug. This is exactly the kind of finding a reproduction study is meant to surface.
     \end{alertblock}
-\end{frame}
-
-\begin{frame}{Summary of Findings}
-    \begin{itemize}
-        \item Exact Discrete SAC reproduction (Project 3) matches the paper's architecture, hyperparameters, and training budget \alert{1:1}
-        \item Task-intent feature $\mu_a$ demonstrably changes learned behavior (Result 3) --- the paper's core claim reproduces qualitatively
-        \item Our success/collision numbers exceed the paper's, traced to a simulator-level physics difference, not implementation error
-        \item Along the way: caught a multi-ego evaluation bug (Milestone 2) and solved a real systems-engineering bottleneck (P-core affinity)
-        \item 6 of the paper's 8 configurations remain open for future exact-match work
-    \end{itemize}
 \end{frame}
 
 % =====================================================================
@@ -699,8 +689,6 @@
         \item Traced result differences to simulator physics rather than implementation error --- a genuine scientific finding, not a failure
         \item Proposed a concrete, literature-grounded path toward \alert{geometry-agnostic, generalizable} intersection decision-making
     \end{itemize}
-    \vspace{10pt}
-    \centering \Large \textbf{Thank you --- Questions?}
 \end{frame}
 
 % =====================================================================
@@ -708,7 +696,31 @@
 % =====================================================================
 
 \begin{frame}{GitHub Link and Individual Contribution}
-    % [Template slide: Add GitHub repository link and individual contributions here]
+    \vspace{-6pt}
+    \centering
+    {\small \textbf{Repository:} \href{https://github.com/Farhan41229/Drl-unsignalized-intersection-navigation}{\textcolor{accentblue}{\texttt{https://github.com/Farhan41229/Drl-unsignalized-intersection-navigation}}}}\\[6pt]
+    \begin{columns}[c]
+        \begin{column}{0.56\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/github_contributions.png}
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \footnotesize
+            \textbf{Ishmam Tahmid} \scriptsize(220041259)\\[1pt]
+            {\tiny \textcolor{accentblue}{\texttt{@ishmam259}} $\cdot$ 16 commits (+3.8k / -250)}\\
+            {\scriptsize $\blacktriangleright$ Auto-tuned $\alpha$, eval engine, telemetry}\\[8pt]
+
+            \footnotesize
+            \textbf{Mahmudul Hasan} \scriptsize(220041231)\\[1pt]
+            {\tiny \textcolor{accentblue}{\texttt{@beiged-kybou}} $\cdot$ 14 commits (+788 / -200)}\\
+            {\scriptsize $\blacktriangleright$ Discrete SAC core, buffer, intent $\mu_a$}\\[8pt]
+
+            \footnotesize
+            \textbf{Farhan Tahsin Khan} \scriptsize(220041229)\\[1pt]
+            {\tiny \textcolor{accentblue}{\texttt{@Farhan41229}} $\cdot$ 13 commits (+1.6k / -100)}\\
+            {\scriptsize $\blacktriangleright$ Sim infra, P-core pinning, pipelines}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =====================================================================
@@ -717,6 +729,11 @@
     \tiny
     \bibliographystyle{plain}
     \bibliography{references}
+\end{frame}
+
+\begin{frame}[c]
+    \centering
+    {\Large \textbf{Thank you --- Questions?}}
 \end{frame}
 
 \end{document}
