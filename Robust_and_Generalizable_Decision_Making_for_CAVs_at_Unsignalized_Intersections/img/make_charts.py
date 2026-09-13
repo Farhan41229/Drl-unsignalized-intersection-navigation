@@ -27,7 +27,7 @@ RED = "#c0392b"
 # ---------------------------------------------------------------------
 labels = ["Project 2\n(PPO, Orig)", "Project 2\n(PPO, Config B)",
           "Project 3\n(Discrete SAC, ours)", "Xiao et al.\n(2024) — paper"]
-success = [100.0, 94.9, 100.0, 97.4]
+success = [97.8, 94.9, 97.8, 97.4]
 collision = [0.0, 0.0, 0.0, 2.6]
 
 x = np.arange(len(labels))
@@ -39,7 +39,7 @@ ax.set_ylabel("Percentage (%)")
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
 ax.set_ylim(0, 112)
-ax.set_title("Success & Collision Rate: Our Reproduction vs. Xiao et al. (2024)")
+ax.set_title("Success & Collision Rate: Ours vs. Paper")
 for bars in (b1, b2):
     for rect in bars:
         h = rect.get_height()

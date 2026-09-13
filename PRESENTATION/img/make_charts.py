@@ -27,7 +27,7 @@ RED = "#c0392b"
 # ---------------------------------------------------------------------
 labels = ["Project 2\n(PPO, Orig)", "Project 2\n(PPO, Config B)",
           "Project 3\n(Discrete SAC, ours)", "Xiao et al.\n(2024) — paper"]
-success = [100.0, 94.9, 97.8, 97.4]
+success = [97.8, 94.9, 97.8, 97.4]
 collision = [0.0, 0.0, 0.0, 2.6]
 
 x = np.arange(len(labels))
