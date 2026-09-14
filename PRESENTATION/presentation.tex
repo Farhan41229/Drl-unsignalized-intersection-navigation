@@ -79,6 +79,8 @@
 \def\beamer@andtitle{\\[4pt]}
 \makeatother
 
+\pdfstringdefDisableCommands{\def\translate#1{#1}}
+
 % Title page: rounded shadow box for title/subtitle, authors and details centered below
 \setbeamertemplate{title page}{%
   \vbox{}
@@ -673,58 +675,31 @@
 % =====================================================================
 
 \begin{frame}{Challenges and Limitations}
-	\centering
-	\vspace{-4pt}
-	\begin{tikzpicture}[
-			card1/.style={
-					draw=navy!40, thick, rounded corners=3.5pt,
-					fill=blockbodyblue!60,
-					text width=6.3cm, minimum height=1.12cm,
-					align=left, inner sep=4.5pt
-				},
-			card2/.style={
-					draw=accentblue!45, thick, rounded corners=3.5pt,
-					fill=accentblue!6,
-					text width=6.3cm, minimum height=1.12cm,
-					align=left, inner sep=4.5pt
-				},
-			hdr/.style={
-					font=\footnotesize\bfseries, align=center,
-					text width=6.5cm
-				}
-		]
-		% Column 1: Engineering & Reproduction Hurdles (Resolved)
-		\node[hdr, text=navy] (h1) at (-3.5, 2.15) {Engineering \& Reproduction (Resolved) \color{green!60!black}{\checkmark}};
-		
-		\node[card1, below=7pt of h1] (c1) {
-			\textbf{\color{navy}\footnotesize Incomplete Paper Specification}\\[2pt]
-			\scriptsize Unreleased paper constants \& parameters recovered via systematic inference.
-		};
-		\node[card1, below=6pt of c1] (c2) {
-			\textbf{\color{navy}\footnotesize Observation Space Alignment}\\[2pt]
-			\scriptsize Reconstructed unreleased 60/61-dim radar ordering, distance ranking, and presence masking.
-		};
-		\node[card1, below=6pt of c2] (c3) {
-			\textbf{\color{navy}\footnotesize Hybrid-CPU Hardware Bottleneck}\\[2pt]
-			\scriptsize Thread synchronization stalls resolved via Intel P-core affinity pinning ($3.5\times$ speedup).
-		};
-
-		% Column 2: Traditional RL Limitations (Target for Next Semester)
-		\node[hdr, text=accentblue] (h2) at (3.5, 2.15) {Traditional RL Bottlenecks (Thesis Focus)};
-		
-		\node[card2, below=7pt of h2] (c4) {
-			\textbf{\color{accentblue}\footnotesize Non-Generalizable Baseline Policy}\\[2pt]
-			\scriptsize Current reproduction is a traditional baseline; lacks geometry invariance and cannot transfer.
-		};
-		\node[card2, below=6pt of c4] (c5) {
-			\textbf{\color{accentblue}\footnotesize Single Fixed Geometry Overfitting}\\[2pt]
-			\scriptsize Policy is overfit to a standard 4-way cross; fails on T-junctions, merges, or roundabouts.
-		};
-		\node[card2, below=6pt of c5] (c6) {
-			\textbf{\color{accentblue}\footnotesize Sim-to-Sim Kinematics Divergence}\\[2pt]
-			\scriptsize Micro-yielding behavior and collision physics differ between \texttt{highway-env} and paper sim.
-		};
-	\end{tikzpicture}
+	\begin{columns}[T]
+		\begin{column}{0.48\textwidth}
+			\begin{block}{Incomplete Paper Specification}
+				\small Unreleased paper constants \& parameters recovered via systematic inference.
+			\end{block}
+		\end{column}
+		\begin{column}{0.48\textwidth}
+			\begin{block}{Non-Generalizable Baseline Policy}
+				\small Current reproduction is a traditional baseline; lacks geometry invariance and cannot transfer.
+			\end{block}
+		\end{column}
+	\end{columns}
+	\vspace{10pt}
+	\begin{columns}[T]
+		\begin{column}{0.48\textwidth}
+			\begin{block}{Sim-to-Sim Kinematics Divergence}
+				\small Micro-yielding behavior and collision physics differ between \texttt{highway-env} and paper sim.
+			\end{block}
+		\end{column}
+		\begin{column}{0.48\textwidth}
+			\begin{block}{Single Fixed Geometry Overfitting}
+				\small Policy is overfit to a standard 4-way cross; fails on T-junctions, merges, or roundabouts.
+			\end{block}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 % =====================================================================
