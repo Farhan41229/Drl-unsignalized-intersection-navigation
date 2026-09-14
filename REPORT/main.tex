@@ -1,0 +1,222 @@
+% !TeX program = pdflatex
+\documentclass{iutbscthesis}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{float}
+
+\addbibresource{citations.bib}
+
+% Project Title
+\title{Deep Reinforcement Learning for Autonomous Vehicle Navigation at Unsignalized Intersections: Comparative Reproduction, Intent Encoding, and Sim-to-Sim Dynamics}
+
+% Authors (Configurable with student names and IDs)
+\addauthor{Farhan Tahsin Khan}{220041229}
+\addauthor{Mahmudul Hasan}{220041231}
+\addauthor{A.K.M Ishmam Tahmid}{220041259}
+
+% Supervision
+\supervisor{Supervisor Name}{Professor / Associate Professor}{Department of Computer Science and Engineering}
+%\addcosupervisor{Co-Supervisor Name}{Assistant Professor}{Department of Computer Science and Engineering}
+
+% Academic Program and Department
+\department{Department of Computer Science and Engineering}
+\program{BACHELOR OF SCIENCE IN COMPUTER SCIENCE AND ENGINEERING}
+\defensedate{15}{October}{2026}
+
+\begin{document}
+
+%-------------------------- FRONT MATTER --------------------------%
+\pagenumbering{roman}
+
+% Title leaf
+\titlepage
+
+\setcounter{tocdepth}{1}
+\begingroup
+\begin{singlespace}
+\linespread{0.88}\selectfont
+\makeatletter
+\renewcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \vskip 0.12em \@plus\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+\makeatother
+\footnotesize
+\tableofcontents
+\end{singlespace}
+\endgroup
+\clearpage
+
+% Combined List of Figures and Tables
+\begingroup
+\begin{singlespace}
+\small
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\vspace*{-0.5cm}
+\listoffigures
+\vspace{0.4cm}
+\listoftables
+\end{singlespace}
+\endgroup
+\clearpage
+
+% Abbreviations
+\begin{abbreviations}
+    \abbr{AEV}{Autonomous Electric Vehicle}
+    \abbr{AIM}{Autonomous Intersection Management}
+    \abbr{CAV}{Connected and Automated Vehicle}
+    \abbr{CEP}{Complex Engineering Problem}
+    \abbr{DQN}{Deep Q-Network}
+    \abbr{DRL}{Deep Reinforcement Learning}
+    \abbr{FCFS}{First-Come-First-Served}
+    \abbr{IDM}{Intelligent Driver Model}
+    \abbr{MDP}{Markov Decision Process}
+    \abbr{MLP}{Multi-Layer Perceptron}
+    \abbr{OpenMP}{Open Multi-Processing}
+    \abbr{POMDP}{Partially Observable Markov Decision Process}
+    \abbr{PPO}{Proximal Policy Optimization}
+    \abbr{RL}{Reinforcement Learning}
+    \abbr{SAC}{Soft Actor-Critic}
+    \abbr{SOTA}{State-of-the-Art}
+    \abbr{SUMO}{Simulation of Urban MObility}
+    \abbr{TraCI}{Traffic Control Interface}
+    \abbr{TTC}{Time-To-Collision}
+    \abbr{V2I}{Vehicle-to-Infrastructure}
+    \abbr{V2V}{Vehicle-to-Vehicle}
+    \abbr{V2X}{Vehicle-to-Everything}
+\end{abbreviations}
+
+% Abstract (~200 words)
+\begin{abstract}
+Navigating unsignalized intersections represents one of the most formidable challenges in autonomous driving, characterized by non-signalized conflict zones, occlusions, and asynchronous, stochastic human-driven traffic. This design project investigates the decision-making capabilities of deep reinforcement learning (DRL) agents navigating a four-way unsignalized intersection across three conflicting directional maneuvers: left turns, straight crossings, and right turns. Grounded in a comprehensive 5-axis taxonomy of autonomous intersection management (AIM) literature, this study executes a rigorous two-phase empirical investigation. Phase 1 conducts an exploratory ablation using on-policy Proximal Policy Optimization (PPO) over 1.2 million episodes. Phase 2 delivers an exact algorithmic reproduction of Xiao et al. (IEEE TVT 2024), implementing Discrete Soft Actor-Critic (SAC) with twin Q-critics and automatic entropy temperature tuning across 50,000 episodes per configuration on the UC Berkeley Flow and Eclipse SUMO microscopic platforms. Furthermore, hardware-level thread affinity pinning to physical performance cores slashed training runtime by 62\%. Deterministic evaluation across 2,100 episodes demonstrated a 99.52\% crossing success rate (0.48\% collision rate), which is analyzed alongside high-momentum crossing dynamics under a discount factor ($\gamma=0.90$) and microscopic driver yielding behavior, contrasting with the non-yielding, kinematic collision dynamics of highway-env.
+\end{abstract}
+
+%-------------------------- MAIN BODY --------------------------%
+\pagenumbering{arabic}
+
+\input{chapters/ch1_intro.tex}
+\input{chapters/ch2_related_works.tex}
+\input{chapters/ch3_problem_scope.tex}
+\input{chapters/ch4_methodology.tex}
+\input{chapters/ch5_implementation.tex}
+\input{chapters/ch6_results.tex}
+\input{chapters/ch7_ethics.tex}
+\input{chapters/ch8_limitations.tex}
+\input{chapters/ch9_conclusion.tex}
+
+%-------------------------- BACK MATTER --------------------------%
+\printbib
+
+\begin{appendices}
+
+\chapter{Weekly Meeting Summary}
+\label{app:meetings}
+\textit{Note: Detailed weekly member contributions and supervisory meeting logs are maintained via Git commit telemetry and will be finalized with project repository sync.}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|p{3.2cm}|p{3.2cm}|p{3.2cm}|p{2.8cm}|}
+\hline
+\textbf{Week} & \textbf{Date} & \textbf{Farhan Tahsin Khan} & \textbf{Mahmudul Hasan} & \textbf{A.K.M Ishmam Tahmid} & \textbf{Next Milestone} \\ \hline
+1--2 & Aug 01--10 & Literature survey and AIM taxonomy formulation & Flow and SUMO environment setup & Initial POMDP state-action derivation & Baseline ring test \\ \hline
+3--4 & Aug 11--20 & PPO baseline training (Phase 1, 1.2M episodes) & Exploration of task intent $\mu_a$ & Evaluation metric pipeline development & RLlib tuning \\ \hline
+5--6 & Aug 21--30 & Discrete SAC derivation and architecture design & Loss function verification and replay pool setup & Hybrid CPU P-core pinning & 50k training launch \\ \hline
+7--8 & Sep 01--10 & Config Original 50k training execution & Config B 50k training execution & Telemetry data extraction & Graph generation \\ \hline
+9--10 & Sep 11--15 & 2,100-episode deterministic evaluation & Sim2Sim comparative forensic audit & Final report and IEEE paper drafting & Project defense \\ \hline
+\end{tabular}%
+}
+\caption{Group Meeting and Milestone Contribution Table}
+\end{table}
+
+\chapter{Code and Implementation Artifacts}
+\label{app:code_artifacts}
+\vspace{-0.5cm}
+{\scriptsize \textit{Note: All source code, simulation network models, hardware tuning scripts, and reproduction pipelines are maintained under active version control. GitHub Repository: \url{https://github.com/Farhan41229/Drl-unsignalized-intersection-navigation}}}
+
+\vspace{-0.3cm}
+\section{Quantitative Summary: GitHub Metrics}
+\vspace{-0.3cm}
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Developer Contribution Metrics (GitHub Repository Telemetry)}
+\label{tab:metrics}
+\renewcommand{\arraystretch}{0.82}
+\begin{tabular}{l c c c}
+\toprule
+\textbf{Team Member} & \textbf{Total Commits} & \textbf{Net $\Delta$ (Additions)} & \textbf{Net $\Delta$ (Deletions)} \\
+\midrule
+Farhan Tahsin Khan (220041229) & 13 & +1,633 & -100 \\
+Mahmudul Hasan (220041231) & 14 & +788 & -200 \\
+A.K.M Ishmam Tahmid (220041259) & 15 & +1,662 & -250 \\
+\midrule
+\textbf{Total} & 42 & +4,083 & -550 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{-0.5cm}
+\section{Feature Ownership and Technical Contribution}
+\vspace{-0.3cm}
+\begin{table}[H]
+\centering
+\scriptsize
+\renewcommand{\arraystretch}{0.82}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{1.8cm}|p{10.5cm}|}
+\hline
+\textbf{Team Member} & \textbf{PR / Module} & \textbf{Technical Summary (Core Module Ownership)} \\
+\hline
+\multirow{2}{*}{Farhan Tahsin Khan} & PR \#01 & \textbf{Flow-SUMO Integration:} Inflow routes, 50mIntersection network, TraCI loop. \\ \cline{2-3}
+ & PR \#04 & \textbf{P-Core Pinning:} CPU affinity constraints and OpenMP scheduling optimizations. \\
+\hline
+\multirow{2}{*}{Mahmudul Hasan} & PR \#02 & \textbf{Discrete SAC Engine:} Twin critic loss, categorical actor, Polyak averaging. \\ \cline{2-3}
+ & PR \#05 & \textbf{Task-Intent ($\mu_a$):} Real-time heading error and normalized distance progress. \\
+\hline
+\multirow{2}{*}{A.K.M Ishmam Tahmid} & PR \#03 & \textbf{Auto-Tuned $\alpha$:} Dynamic entropy temperature optimization for exploratory decay. \\ \cline{2-3}
+ & PR \#06 & \textbf{Forensic Telemetry:} Trajectory evaluation scripts and comparative plot pipelines. \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\vspace{-0.5cm}
+\section{Verification: GitHub Screenshots}
+\vspace{-0.3cm}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \fbox{\includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{a.png}}
+        \vspace{0.02cm}
+        \caption{Commit History Verification}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \fbox{\includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{c.png}}
+        \vspace{0.02cm}
+        \caption{Contributors Activity Graph}
+    \end{subfigure}
+    \vspace{-0.25cm}
+    \caption{GitHub Repository Verification Telemetry Artifacts.}
+    \label{fig:git_telemetry}
+\end{figure}
+
+\end{appendices}
+
+\end{document}

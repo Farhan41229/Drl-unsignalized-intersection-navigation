@@ -1,0 +1,16 @@
+\chapter{Challenges and Limitations}
+\label{ch:limitations}
+
+Transparently identifying system limitations is essential for research validity:
+
+\vspace{-0.2cm}
+\section{Physical Geometry and Inflow Saturation}
+The \texttt{50mIntersection} template features short approach arms (22.8 m from boundary to stop line), queuing at most 2--3 vehicles before backing up. Inflows above $p = 0.08$ veh/s per arm caused insertion gridlock in SUMO, blocking ego vehicle spawning in up to 90\% of episodes.
+
+\vspace{-0.2cm}
+\section{Sim-to-Sim Disparities and Yielding Shields}
+In \texttt{highway-env}, rigid bounding boxes cause instant collisions upon overlap. Conversely, SUMO models microscopic driver behavior with emergency deceleration (\texttt{emergencyDecel}). When the ego entered at 7 m/s, conflicting IDM vehicles yielded right-of-way, effectively shielding the ego from collisions during evaluation.
+
+\vspace{-0.2cm}
+\section{Telemetry Sensitivity and Deployment Boundaries}
+Flow monitors collision detection globally ($\text{len}(\text{getCollidingVehiclesIDList}()) > 0$). Consequently, 39 of the 70 logged training collisions in Config Original occurred when the ego was unspawned due to background IDM clipping, injecting noisy penalties into the replay pool. Furthermore, the 99.52\% crossing rate is conditional on deterministic greedy execution ($\arg\max_a Q$); open-world sensor noise and uncoordinated human drivers represent critical domain-transfer barriers.

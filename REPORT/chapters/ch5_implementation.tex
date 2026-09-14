@@ -1,0 +1,78 @@
+\chapter{System Implementation}
+\label{ch:implementation}
+
+\section{Simulation Infrastructure and Flow-SUMO Integration}
+The simulation platform is architected around UC Berkeley's \textbf{Flow} \cite{wu2017flow}, operating as middleware between Python and the \textbf{SUMO} microscopic engine \cite{krajzewicz2012recent}. At runtime, Flow initializes SUMO via TraCI. Physics substeps run at 15 Hz ($\Delta t_{\text{sim}} \approx 0.0667$ s), while the high-level policy executes at 1 Hz over an episode horizon of $H = 25$ steps (25 s). Background vehicles enter with inflow probability $p = 0.06$ veh/s per arm starting at $t=1$ s, governed by the Intelligent Driver Model (noise $\eta = 0.2$, minimum gap $s_0 = 1.0$ m, $v_{\text{max}} = 8.0$ m/s). A single ego vehicle is injected on West arm \texttt{E\#L-X} within $t \in [1, 2]$ s at $p = 1.0$.
+
+\section{Algorithmic Implementation Paradigms}
+\textbf{Phase 1 (PPO Baseline)}: Executed using Ray RLlib \cite{schulman2017proximal, liang2018ray} with MLP \texttt{[32, 32, 32]}, tanh activations, $\gamma = 0.999$, and 10 parallel CPU workers across 1.2M episodes. On-policy rollouts confirmed viability but exhibited low sample efficiency and hesitant crawling policies.
+
+\textbf{Phase 2 (Exact Discrete SAC)}: To achieve 1:1 mathematical alignment with Xiao et al. \cite{xiao2024decision}, Phase 2 implemented Discrete SAC in PyTorch. The policy outputs a categorical distribution:
+\begin{equation}
+    \pi_\theta(a|s) = \text{Softmax}(z_\theta(s)) = \frac{\exp(z_\theta(s, a))}{\sum_{a' \in \mathcal{A}} \exp(z_\theta(s, a'))}
+\end{equation}
+Twin critics $Q_{\phi_1}, Q_{\phi_2}$ use a 4-layer MLP topology: $\text{Input}(\text{dim}(s)) \rightarrow 256 \rightarrow 256 \rightarrow 64 \rightarrow |\mathcal{A}|=3$. The soft Bellman target value $y$ for transition $(s, a, r, s', d)$ is:
+\begin{equation}
+    y = r + (1 - d) \gamma \sum_{a' \in \mathcal{A}} \pi_\theta(a'|s') \left[ \min_{j=1,2} Q_{\bar{\phi}_j}(s', a') - \alpha \log \pi_\theta(a'|s') \right]
+\end{equation}
+Target critic weights $\bar{\phi}_j$ update via Polyak averaging ($\tau = 0.005$). Critic loss is $J_Q(\phi_i) = \mathbb{E}[ \frac{1}{2} ( Q_{\phi_i}(s, a) - y )^2 ]$, while actor policy loss is:
+\begin{equation}
+    J_\pi(\theta) = \mathbb{E}_{s \sim \mathcal{D}} \left[ \sum_{a \in \mathcal{A}} \pi_\theta(a|s) \left( \alpha \log \pi_\theta(a|s) - \min_{j=1,2} Q_{\phi_j}(s, a) \right) \right]
+\end{equation}
+The entropy temperature $\alpha$ is auto-tuned toward target entropy $\bar{\mathcal{H}} = -0.98 \log(1/|\mathcal{A}|) \approx 1.0766$ via loss $J(\alpha) = \mathbb{E}[ -\alpha \sum_{a} \pi_\theta(a|s) ( \log \pi_\theta(a|s) + \bar{\mathcal{H}} ) ]$. Table~\ref{tab:hyperparameters} outlines parameter alignment.
+
+\vspace{-0.2cm}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{0.95}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Hyperparameter} & \textbf{Xiao et al. \cite{xiao2024decision}} & \textbf{Our Phase 2 SAC} & \textbf{Status} \\ \hline
+RL Algorithm & Discrete SAC & Discrete SAC & Exact Match \\ \hline
+Actor / Critic Topology & MLP [256, 256, 64, 3] & MLP [256, 256, 64, 3] & Exact Match \\ \hline
+Discount Factor ($\gamma$) / Polyak ($\tau$) & 0.90 / 0.005 & 0.90 / 0.005 & Exact Match \\ \hline
+Replay Buffer / Batch Size & 150,000 / 1,024 & 150,000 / 1,024 & Exact Match \\ \hline
+Actor / Critic Learning Rates & $3 \times 10^{-4}$ / $5 \times 10^{-4}$ & $3 \times 10^{-4}$ / $5 \times 10^{-4}$ & Exact Match \\ \hline
+Controller Gain ($K_P$) / Episodes & 5.0 s$^{-1}$ / 50,000 & 5.0 s$^{-1}$ / 50,000 per config & Exact Match \\ \hline
+Evaluation Protocol & Greedy ($\arg\max_a Q$) & Greedy ($\arg\max_a Q$) & Exact Match \\ \hline
+\end{tabular}%
+}
+\vspace{-0.2cm}
+\caption{Hyperparameter Alignment Matrix between Xiao et al. (2024) and Our Phase 2 Reproduction}
+\label{tab:hyperparameters}
+\end{table}
+
+\vspace{-0.2cm}
+\section{Hardware Optimization: P-Core Affinity Pinning}
+\label{sec:pcore_affinity}
+On modern hybrid multi-core processors (Intel 13th Gen with heterogeneous Performance and Efficient cores), preliminary runs suffered severe spin-wait barrier stalls in OpenMP and PyTorch matrix multiplication due to OS thread migration across P-cores and E-cores:
+\begin{itemize}
+    \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+    \item \textbf{Default OS Scheduling}: Throughput was 46.2 ep/min ($>18.1$ h for 50k episodes) due to inter-core cache synchronization jitter ($>350$ ms).
+    \item \textbf{P-Core Affinity Binding}: Constraining the process strictly to dedicated physical P-cores (0, 2, 4, 6) with \texttt{OMP\_NUM\_THREADS=4} and \texttt{MKL\_NUM\_THREADS=4} eliminated synchronization jitter ($<2$ ms).
+    \item \textbf{Performance Gain}: Throughput surged to \textbf{142.8 ep/min} (6.9 h for 50k episodes), achieving a \textbf{62\% runtime reduction} and saving 22.4 hours across configurations (\autoref{tab:pcore_benchmark}).
+\end{itemize}
+
+\vspace{-0.2cm}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Computational Benchmark: Default OS Scheduling vs. P-Core Affinity Pinning}
+\label{tab:pcore_benchmark}
+\renewcommand{\arraystretch}{0.95}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Evaluation Metric} & \textbf{Default OS Scheduling} & \textbf{P-Core Affinity Binding} & \textbf{Performance Gain} \\ \hline
+Processor Topology & Intel Core i7 (8P + 8E cores) & Dedicated Physical Cores 0, 2, 4, 6 & Cache thrashing eliminated \\ \hline
+Thread Concurrency & Dynamic OS thread migration & \texttt{OMP=4, MKL=4, taskset -c 0,2,4,6} & Deterministic affinity \\ \hline
+Mean Training Throughput & 46.2 episodes/minute & 142.8 episodes/minute & \textbf{+209\% throughput} \\ \hline
+Wall-Clock Time (50k Episodes) & 18.1 hours & 6.9 hours & \textbf{62\% runtime reduction} \\ \hline
+Spin-Wait Barrier Latency & Severe ($> 350$ ms jitter) & Negligible ($< 2$ ms) & Micro-stalls resolved \\ \hline
+Total Compute Savings & --- & 11.2 hours saved / config & 22.4 hours saved total \\ \hline
+\end{tabular}%
+}
+\end{table}
+

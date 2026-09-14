@@ -1,0 +1,14 @@
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+
+\section{Summary of Completed Research}
+This project investigated DRL for unsignalized intersection navigation across five milestones: (1)~\textbf{AIM Taxonomy}: Established a 5-axis taxonomy of intersection management; (2)~\textbf{PPO Baseline}: Benchmarked on-policy RLlib agents over 1.2M episodes; (3)~\textbf{Discrete SAC Reproduction}: Executed 1:1 mathematical reproduction of Xiao et al. \cite{xiao2024decision} (twin critics, auto-tuned $\alpha$) over 100k episodes in Flow/SUMO; (4)~\textbf{Hardware Acceleration}: Engineered P-core affinity pinning, achieving a \textbf{62\% runtime reduction} (saving 22.4 hours); and (5)~\textbf{Forensic Audit}: Demystified the 99.52\% success rate through exposure dwell-time modeling under $\gamma=0.90$ and microscopic yielding dynamics.
+
+\vspace{-0.2cm}
+\section{Architectural Recommendations for Future Work}
+Future research should implement: (1)~\textbf{Traffic Pre-Warming}: Enforce a 5.0 s boundary pre-fill phase to ensure dense cross-traffic actively populates the junction; (2)~\textbf{Velocity Regularization}: Penalize excessive junction velocity: $R_{\text{aug}} = R - \beta \cdot \mathbf{1}_{\{\text{junction}\}} \cdot \max(0, v - v_{\text{safe}})$; (3)~\textbf{Cooperative Multi-Agent V2V}: Extend single-agent POMDP to multi-agent CTDE (MAPPO or Multi-Agent SAC); and (4)~\textbf{Sim-to-Real Domain Randomization}: Inject radar observation noise ($\pm 3$ m), communication latencies, and diverse human driver profiles.
+
+\vspace{-0.2cm}
+\section{Concluding Remarks}
+By combining rigorous algorithmic reproduction with critical forensic analysis of simulator physics and RL specification gaming, this project provides a validated implementation of intent-aware decision-making and a foundational methodology for diagnosing Sim-to-Sim transfer phenomena in autonomous driving.
+

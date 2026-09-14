@@ -1,0 +1,19 @@
+\chapter{Ethical, Social, and Environmental Considerations}
+\label{ch:ethics}
+
+In accordance with Course Outcome 3 (CO3), deploying autonomous intersection systems entails critical responsibilities across technical and societal dimensions:
+
+\vspace{-0.3cm}
+\section{Ethical Dimensions: Scientific Integrity and Fairness}
+\textbf{Scientific Integrity}: Section \ref{sec:demystifying_100} analyzed the 99.52\% crossing rate, reporting all evaluation collisions (0.48\% CR) and training collisions (70 in Orig, 54 in B). Data transparency is an ethical prerequisite for autonomy.
+\textbf{Algorithmic Fairness}: Policies optimized solely for ego speed impose unfair yielding burdens on surrounding traffic. Multi-agent reward formulation must prevent inducing emergency panic braking in human drivers.
+
+\vspace{-0.3cm}
+\section{Societal Impacts: Bottleneck Relief and Safety}
+Autonomous intersection reservation eliminates stop-and-go delays and enables priority emergency routing. Because $>94\%$ of crashes stem from human error, autonomous agents with sub-millisecond reaction times and 360-degree radar eliminate distracted driving and fatal angular T-bone collisions.
+
+\vspace{-0.3cm}
+\section{Environmental Sustainability and Resource Efficiency}
+\textbf{Vehicular Emissions}: Eliminating stop-and-go acceleration cycles curtails fuel consumption and greenhouse gas emissions ($CO_2$, $NO_x$) while extending electric vehicle battery range.
+\textbf{Energy Stewardship}: Pinning CPU threads to physical P-cores (Section \ref{sec:pcore_affinity}) cut training runtime by \textbf{62\%} (saving 22.4 hours).
+

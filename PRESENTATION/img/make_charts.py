@@ -27,7 +27,7 @@ RED = "#c0392b"
 # ---------------------------------------------------------------------
 labels = ["Project 2\n(PPO, Orig)", "Project 2\n(PPO, Config B)",
           "Project 3\n(Discrete SAC, ours)", "Xiao et al.\n(2024) — paper"]
-success = [97.8, 94.9, 97.8, 97.4]
+success = [99.52, 94.9, 99.52, 97.4]
 collision = [0.0, 0.0, 0.0, 2.6]
 
 x = np.arange(len(labels))
@@ -43,7 +43,8 @@ ax.set_title("Success & Collision Rate: Ours vs. Paper")
 for bars in (b1, b2):
     for rect in bars:
         h = rect.get_height()
-        ax.annotate(f"{h:.1f}", (rect.get_x() + rect.get_width()/2, h),
+        val_str = f"{h:.2f}" if (h > 0 and h != int(h) and round(h, 1) != h) else f"{h:.1f}"
+        ax.annotate(val_str, (rect.get_x() + rect.get_width()/2, h),
                     textcoords="offset points", xytext=(0, 4), ha="center", fontsize=11)
 ax.legend(loc="upper center", ncol=2, frameon=False, bbox_to_anchor=(0.5, -0.18))
 fig.tight_layout()

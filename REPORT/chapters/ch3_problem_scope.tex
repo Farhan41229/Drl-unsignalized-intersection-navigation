@@ -1,0 +1,54 @@
+\chapter{Problem Definition and Scope}
+\label{ch:problem_scope}
+
+\section{Intersection Geometry and Spatial Configuration}
+The physical scenario is a symmetrical, four-way, single-lane, unsignalized urban intersection modeled via \texttt{50mIntersection.net.xml} in Eclipse SUMO. The intersection comprises four orthogonal approach arms: West (\texttt{E\#L-X}), East (\texttt{E\#R-X}), North (\texttt{E\#T-X}), and South (\texttt{E\#D-X}), with departure arms denoted \texttt{E\#X-<Dir>}. The intersection center node \texttt{X} is at $(0, 0)$. Each approach arm has a single 3.2-meter lane with a statutory speed limit of 8.0 m/s (28.8 km/h). Approach arms measure 22.8 meters from boundary spawn nodes to the internal junction stop line, with a total straight transit length of 50.0 meters.
+
+\section{Multi-Task Trajectory and Conflict Point Topology}
+An autonomous ego vehicle (AEV) enters on West arm (\texttt{E\#L-X}) and is stochastically assigned one of three operational tasks: \textbf{Task 1 (Right Turn)} traversing to South exit \texttt{E\#X-D} (2 conflict points, low risk); \textbf{Task 2 (Straight Crossing)} traversing to East exit \texttt{E\#X-R} (6 conflict points, moderate risk); and \textbf{Task 3 (Left Turn)} traversing across opposing paths to North exit \texttt{E\#X-T} (7 conflict points, highest risk). \autoref{tab:conflict_points} formalizes the topological complexity across the maneuvers.
+
+\vspace{-0.2cm}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{0.95}
+\begin{tabular}{|l|c|c|p{7.5cm}|}
+\hline
+\textbf{Maneuver} & \textbf{Exit Edge} & \textbf{Conflict Points} & \textbf{Geometric Hazard Characterization} \\ \hline
+\textbf{Right Turn} & \texttt{E\#X-D} & \textbf{2} & Low risk; merges smoothly into cross-traffic stream. \\ \hline
+\textbf{Straight Crossing} & \texttt{E\#X-R} & \textbf{6} & Moderate risk; perpendicularly intersects northbound/southbound flows. \\ \hline
+\textbf{Left Turn} & \texttt{E\#X-T} & \textbf{7} & \textbf{Highest risk}; cuts directly across oncoming westbound and cross flows. \\ \hline
+\end{tabular}
+\vspace{-0.2cm}
+\caption{Topological Conflict Point Characterization across Multi-Task Maneuvers}
+\label{tab:conflict_points}
+\end{table}
+
+\vspace{-0.2cm}
+\section{Partially Observable Markov Decision Process (POMDP) Model}
+The interaction is formulated as a discrete-time POMDP $\mathcal{M} = \langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}, \Omega, \mathcal{O}, \gamma \rangle$: $\mathcal{S}$ is continuous state; $\mathcal{A} = \{a_0: \text{Acc (+1 m/s)}, a_1: \text{Idle (0 m/s)}, a_2: \text{Dec (-1 m/s)}\}$ modulates speed; $\mathcal{P}$ denotes microscopic IDM transition dynamics; $\mathcal{R}$ is scalar reward; $\Omega, \mathcal{O}$ model sensor observations within radar radius $R_{\text{detect}} = 48.0$ m; and $\gamma = 0.90$ is the discount factor.
+
+\subsection{Reward Formulation}
+The scalar reward follows Eq. 23 of Xiao et al. \cite{xiao2024decision}:
+\begin{equation}
+    R_t = \begin{cases}
+        +30.0 & \text{if ego arrives safely at designated exit edge (Success)} \\
+        -120.0 & \text{if ego is involved in a collision (Fatal Failure)} \\
+        +0.1 & \text{if current vehicle speed } \text{round}(v) = 8.0 \text{ m/s (Cruising Incentive)} \\
+        0.0 & \text{otherwise (Transit Step)}
+    \end{cases}
+    \label{eq:reward}
+\end{equation}
+Under discount factor $\gamma = 0.90$, cumulative discounted return is $G_0 = \sum_{t=0}^{T} \gamma^t R_t$.
+
+\vspace{-0.2cm}
+\section{Defined Project Scope and Boundaries}
+Methodological boundaries of this project are established as follows:
+\begin{enumerate}
+    \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+    \item \textbf{Longitudinal Focus}: Steering is maintained by SUMO road geometry; the RL policy governs longitudinal speed regulation and gap acceptance.
+    \item \textbf{Single-Ego Mixed Autonomy}: Exactly one autonomous ego vehicle is managed per episode; background traffic consists of human-driven IDM vehicles.
+    \item \textbf{Fixed Horizon}: Each episode has an upper bound of $H = 25$ decision steps (1 Hz policy rate, 15 Hz simulation sub-stepping), corresponding to 25 seconds.
+    \item \textbf{Comparative Framework}: Systematic benchmark between on-policy PPO (Phase 1) and off-policy Discrete SAC (Phase 2 exact reproduction).
+\end{enumerate}
+
